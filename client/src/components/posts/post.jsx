@@ -1,32 +1,38 @@
 import React from "react"
 import { makeStyles } from "@material-ui/core/styles"
 import Card from "@material-ui/core/Card"
-import CardActions from "@material-ui/core/CardActions"
 import CardContent from "@material-ui/core/CardContent"
-import Button from "@material-ui/core/Button"
 import Typography from "@material-ui/core/Typography"
 
 const useStyles = makeStyles((theme) => ({
   root: {
     margin: "16px 0px",
     backgroundColor: theme.palette.primary.main,
-    maxWidth: "70%",
   },
   title: {
     fontWeight: 500,
   },
 }))
 
+const _sliceContent = (content) => {
+  if (content.length < 40) return content
+  return content.slice(0, 39) + ".."
+}
+
 export default function Post(props) {
   const classes = useStyles()
+
+  const { title, content } = props.post
+
+  const slicedContent = _sliceContent(content)
 
   return (
     <Card className={classes.root} variant="outlined">
       <CardContent>
         <Typography className={classes.title} variant="h6">
-          {props.post.title}
+          {title}
         </Typography>
-        <Typography color="textSecondary">ssssssssssss</Typography>
+        <Typography color="textSecondary">{slicedContent}</Typography>
       </CardContent>
     </Card>
   )

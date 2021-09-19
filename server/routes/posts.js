@@ -1,3 +1,4 @@
+const _ = require("lodash")
 const postsRouter = require("express").Router()
 
 const Collections = require("../collections")
@@ -7,12 +8,14 @@ const Logger = require("../utils/logger")
 const Posts = new Collections.Posts()
 
 postsRouter.get("/", async (req, res) => {
-  const { query } = req.body
+  const { query } = req.query
+
+  const parsedQuery = _.isNil(query) ? query : JSON.parse(query)
 
   Logger.info("GET posts by query", query)
 
   try {
-    const posts = await Posts.getPostsByQuery(query)
+    const posts = await Posts.getPostsByQuery(parsedQuery)
 
     Logger.info(`Successfully got ${posts.length} posts by query`, { query })
 
@@ -30,19 +33,25 @@ postsRouter.get("/", async (req, res) => {
 })
 
 postsRouter.post("/", async (req, res) => {
-  Logger.info("POST new post", req.body)
+  console.log(req.body)
+
+  const { post } = req.body
+
+  Logger.info("POST new post", post)
 
   try {
-    const post = await Posts.createNewPost(req.body)
+    const createdPost = await Posts.createNewPost(post)
 
-    Logger.info(`Successfully created new post with _id ${post._id}`, { post })
+    Logger.info(`Successfully created new post with _id ${createdPost._id}`, {
+      createdPost,
+    })
 
-    res.json({ post, done: true })
+    res.json({ post: createdPost, done: true })
   } catch (error) {
     const errorMessage = "Failed creating new post"
 
     Logger.error(errorMessage, {
-      post: req.body,
+      post,
       error: error.message,
     })
 
@@ -52,14 +61,15 @@ postsRouter.post("/", async (req, res) => {
 
 postsRouter.put("/:id", async (req, res) => {
   const { id } = req.params
+  const { update } = req.body
 
   Logger.info(`PUT update post with _id ${req.params.id}`, {
     postId: id,
-    update: req.body,
+    update,
   })
 
   try {
-    const updatedPost = await Posts.updatePostById(id, req.body)
+    const updatedPost = await Posts.updatePostById(id, update)
 
     Logger.info(`Successfully updated post with _id ${updatedPost._id}`, {
       updatedPost,
@@ -70,7 +80,7 @@ postsRouter.put("/:id", async (req, res) => {
     const errorMessage = "Failed updating post"
 
     Logger.error(errorMessage, {
-      update: req.body,
+      update,
       error: error.message,
     })
 
@@ -92,7 +102,7 @@ postsRouter.delete("/:id", async (req, res) => {
       deletedPost,
     })
 
-    res.json({ done: true, id })
+    res.json({ id, done: true })
   } catch (error) {
     const errorMessage = `Failed deleting post with _id ${id}`
 

@@ -1,9 +1,7 @@
 import CssBaseline from "@material-ui/core/CssBaseline"
-
-import Navbar from "./components/navbar/index"
-
 import { createTheme, ThemeProvider } from "@material-ui/core/styles"
-import Posts from "./components/posts"
+
+import { Home, CreatePost } from "./pages/index"
 
 const theme = createTheme({
   palette: {
@@ -28,8 +26,7 @@ function App() {
     <div>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Navbar />
-        <Posts />
+        <Home />
       </ThemeProvider>
     </div>
   )

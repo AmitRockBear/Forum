@@ -6,11 +6,13 @@ const postSchema = new Mongoose.Schema(
       type: String,
       required: true,
       minlength: 2,
+      maxLength: 25,
     },
     content: {
       type: String,
       required: true,
       minlength: 4,
+      maxLength: 255,
     },
     date: {
       type: Date,

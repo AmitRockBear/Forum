@@ -7,8 +7,8 @@ const Logger = require("../utils/logger")
 const Comments = new Collections.Comments()
 
 commentsRouter.get("/", async (req, res) => {
-  const { query } = req.body
-
+  const { query } = req.query
+  
   Logger.info("GET comments by query", query)
 
   try {
