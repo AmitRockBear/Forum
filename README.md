@@ -8,5 +8,4 @@ The backend is written in JS using nodeJS and the following technologies:
   
 The frontend is written in React and uses the following technologies:
 - material-ui
-- react
 - axios
